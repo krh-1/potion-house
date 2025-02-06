@@ -2,16 +2,13 @@
     "redirects": [
         {
             "source": "/",
-            "destination": "/e",
+            "destination": "/index.html",
             "permanent": true
         }
     ],
     "routes": [
         { "src": "/(.*)", "dest": "/index.html" }
     ],
-    "build": {
-        "env": {
-            "FRAMEWORK": "static"
-        }
-    }
+    "outputDirectory": ".",
+    "framework": "static"
 }
