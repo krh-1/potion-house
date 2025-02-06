@@ -9,6 +9,5 @@
     "routes": [
         { "src": "/(.*)", "dest": "/index.html" }
     ],
-    "outputDirectory": ".",
-    "framework": "static"
+    "outputDirectory": "."
 }
