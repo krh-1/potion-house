@@ -5,5 +5,8 @@
         "destination": "/e",
         "permanent": true
       }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "/index.html" }
     ]
-  }
+}
