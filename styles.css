@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka&family=Quicksand:wght@300;400&display=swap');
+
+/* Muted Color Scheme */
+:root {
+    --primary-color: #B7C2BA;  /* Light muted gray-green */
+    --secondary-color: #C8D3D9;  /* Soft muted gray-blue */
+    --tertiary-color: #E5E8E6;  /* Very light gray with a green hint */
+    --neutral-light: #F5F5F5;  /* Soft gray for light backgrounds */
+    --neutral-gray: #B8B8B8;  /* Medium gray for borders and accents */
+    --neutral-dark: #444444;  /* Dark gray for text */
+}
+
+/* General Layout */
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--neutral-light); /* Soft gray for body background */
+    color: var(--neutral-dark); /* Dark gray for text */
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Apply whimsical font for headings & logo */
+h1, h2 {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--neutral-dark); /* Dark gray for better contrast */
+}
+
+/* Logo Overlay */
+.hero .logo img {
+    position: absolute;
+    top: 20px; /* Adjust as needed */
+    left: 20px;
+    height: 60px; /* Adjust logo size */
+    width: auto;
+    z-index: 2; /* Ensures it’s above the overlay */
+}
+
+/* Logo Styling */
+.logo img {
+    height: 50px; /* Adjust height as needed */
+    width: auto;
+    display: block;
+}
+
+/* Ensure sections take full width */
+section {
+    width: 100%;
+    padding: 20px; /* Adds consistent padding for all sections */
+}
+
+/* Hero Section with Background Image */
+.hero {
+    position: relative;
+    padding: 80px 20px;
+    height: 400px;
+    background-image: url('images/Hero-1.png'); /* Ensure correct path */
+    background-size: cover;
+    background-position: 75% 75%; /* Focuses on middle-right */
+    background-repeat: no-repeat;
+    color: white; /* White text for contrast */
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Overlay to Darken the Background */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for better text contrast */
+    z-index: 0;
+}
+
+/* Ensure the text is above the overlay */
+.hero h1,
+.hero p {
+    position: relative;
+    z-index: 1;
+    padding-left: 20px;
+    color: white; /* Ensures all text in hero section is white */
+}
+/* Increase font size for h1 */
+h1 {
+    font-size: 36px; /* Larger font size for prominence */
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+/* Section Background Colors */
+#play {
+    background-color: var(--primary-color); /* Light muted gray-green for play section */
+    color: var(--neutral-dark); /* Dark gray text */
+}
+
+#more-about-me {
+    background-color: var(--secondary-color); /* Soft muted gray-blue for more about me section */
+    color: var(--neutral-dark); /* Dark gray text for better contrast */
+}
+
+/* Game Card Grid */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Aligns cards to the left */
+    gap: 20px; /* Adds spacing between cards */
+    padding: 20px;
+}
+
+/* Game Card Styling */
+.game-card {
+    background-color: var(--tertiary-color); /* Very light gray */
+    border: 1px solid var(--neutral-gray); /* Subtle gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds subtle shadow for depth */
+    width: 300px; /* Fixed width */
+    min-height: 200px; /* Prevents it from being too small */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content within the card */
+}
+
+/* Ensure Images Don't Overflow */
+.game-card img {
+    width: 100%;
+    max-width: 250px; /* Ensures image doesn’t exceed the card */
+    height: auto;
+    display: block;
+}
+
+/* Style Social Links */
+.social-links {
+    display: flex;
+    gap: 20px; /* Adds spacing between icons */
+    align-items: center;
+    margin-top: 10px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--neutral-dark); /* Uses dark gray text for contrast */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.social-links i {
+    font-size: 24px; /* Adjust icon size */
+    margin-right: 8px; /* Adds space between icon and text */
+}
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+}
