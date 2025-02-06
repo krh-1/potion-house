@@ -189,3 +189,12 @@ h1 {
     font-size: 30px;
     cursor: pointer;
 }
+
+#gameFrame {
+    width: 100%; /* Makes it responsive on smaller screens */
+    max-width: 480px; /* Matches game width */
+    height: 720px; /* Matches game height */
+    border: none; /* Removes border */
+    display: block;
+    margin: 0 auto; /* Centers the iframe */
+}
