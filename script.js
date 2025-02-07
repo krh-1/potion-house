@@ -21,18 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Open the game modal and force iframe reload
     function openModal() {
-        modal.style.display = "flex"; // Show modal
-        iframe.src = ""; // Clear previous game load
-
-        // Force iframe to reload the game (fixes Safari WebGL issues)
-        setTimeout(function () {
-            var gameUrl = "games/dodge-the-creeps/index.html";
-            if (!supportsWebGL2()) {
-                console.warn("WebGL 2 not supported, forcing WebGL 1 mode.");
-                gameUrl += "?force-webgl1=true"; // Adjust this based on your game settings
-            }
-            iframe.src = gameUrl;
-        }, 100); // Short delay to force iframe refresh
+        var modal = document.getElementById("game-modal");
+        var iframe = document.getElementById("gameFrame");
+    
+        if (modal && iframe) {
+            modal.style.display = "flex"; // Show modal
+            iframe.src = ""; // Clear previous game
+    
+            // Force game to reload to avoid WebGL issues
+            setTimeout(function () {
+                iframe.src = "games/dodge-the-creeps/index.html";
+            }, 300); // Delayed reload helps avoid WebGL errors
+        } else {
+            console.error("Modal or iframe not found!");
+        }
     }
 
     // Close the game modal
