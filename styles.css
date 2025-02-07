@@ -181,6 +181,7 @@ h1 {
     position: relative;
     width: 90%;
     max-width: 500px;
+    will-change: transform; /* Ensures Safari renders WebGL correctly */
 }
 
 .close {
