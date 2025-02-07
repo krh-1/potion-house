@@ -9,12 +9,29 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // Function to check WebGL 2 support
+    function supportsWebGL2() {
+        try {
+            var canvas = document.createElement("canvas");
+            return !!(window.WebGL2RenderingContext && canvas.getContext("webgl2"));
+        } catch (e) {
+            return false;
+        }
+    }
+
     // Use event delegation to detect clicks on game cards
     document.addEventListener("click", function (event) {
         var gameCard = event.target.closest(".game-card");
         if (gameCard) {
             modal.style.display = "flex"; // Show modal
-            iframe.src = "games/dodge-the-creeps/index.html"; // Load game in iframe
+
+            // Load game, forcing WebGL 1 if WebGL 2 is not supported
+            var gameUrl = "games/dodge-the-creeps/index.html";
+            if (!supportsWebGL2()) {
+                console.warn("WebGL 2 not supported, forcing WebGL 1 mode.");
+                gameUrl += "?force-webgl1=true"; // Adjust this based on your game settings
+            }
+            iframe.src = gameUrl; // Load the correct version of the game
         }
     });
 
