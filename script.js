@@ -19,25 +19,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Use event delegation to detect clicks on game cards
-    document.addEventListener("click", function (event) {
-        var gameCard = event.target.closest(".game-card");
-        if (gameCard) {
-            modal.style.display = "flex"; // Show modal
+    // Open the game modal and force iframe reload
+    function openModal() {
+        modal.style.display = "flex"; // Show modal
+        iframe.src = ""; // Clear previous game load
 
-            // Load game, forcing WebGL 1 if WebGL 2 is not supported
+        // Force iframe to reload the game (fixes Safari WebGL issues)
+        setTimeout(function () {
             var gameUrl = "games/dodge-the-creeps/index.html";
             if (!supportsWebGL2()) {
                 console.warn("WebGL 2 not supported, forcing WebGL 1 mode.");
                 gameUrl += "?force-webgl1=true"; // Adjust this based on your game settings
             }
-            iframe.src = gameUrl; // Load the correct version of the game
+            iframe.src = gameUrl;
+        }, 100); // Short delay to force iframe refresh
+    }
+
+    // Close the game modal
+    function closeModal() {
+        modal.style.display = "none"; // Hide modal
+        iframe.src = ""; // Stop game when modal is closed
+    }
+
+    // Use event delegation to detect clicks on game cards
+    document.addEventListener("click", function (event) {
+        var gameCard = event.target.closest(".game-card");
+        if (gameCard) {
+            openModal(); // Open modal when clicking a game
         }
     });
 
     // Close the modal when the close button is clicked
-    closeBtn.addEventListener("click", function () {
-        modal.style.display = "none"; // Hide modal
-        iframe.src = ""; // Stop game when modal is closed
-    });
+    closeBtn.addEventListener("click", closeModal);
 });

@@ -182,6 +182,7 @@ h1 {
     width: 90%;
     max-width: 500px;
     will-change: transform; /* Ensures Safari renders WebGL correctly */
+    contain: strict; /* Helps Safari properly isolate rendering */
 }
 
 .close {
