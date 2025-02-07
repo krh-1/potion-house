@@ -161,14 +161,14 @@ h1 {
 
 /* Modal Styling */
 .modal {
-    display: none; /* Hidden by default */
+    display: none; /* Hide modal on page load */
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -180,6 +180,8 @@ h1 {
     border-radius: 8px;
     text-align: center;
     position: relative;
+    width: 90%;
+    max-width: 500px;
 }
 
 .close {
@@ -191,10 +193,7 @@ h1 {
 }
 
 #gameFrame {
-    width: 100%; /* Makes it responsive on smaller screens */
-    max-width: 480px; /* Matches game width */
+    width: 100%;
     height: 720px; /* Matches game height */
-    border: none; /* Removes border */
-    display: block;
-    margin: 0 auto; /* Centers the iframe */
+    border: none;
 }
