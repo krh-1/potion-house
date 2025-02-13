@@ -3,36 +3,28 @@ window.setGodotTilt = function (x, y) {
     console.log("✅ Received tilt:", x, y);
     if (typeof godotTilt === "function") {
         godotTilt(x, y); // Send tilt data to Godot
+    } else if (typeof GodotRuntime !== "undefined" && GodotRuntime.call) {
+        console.log("📡 Sending tilt data via GodotRuntime...");
+        GodotRuntime.call("godotTilt", x, y);
     } else {
         console.error("❌ godotTilt function is missing in Godot! Cannot send tilt data.");
     }
 };
 
-console.log("✅ setGodotTilt function is now defined globally.");
-
-// ✅ Ensure `godotTilt` is exposed properly to JavaScript
-if (!window.godotTilt) {
-    console.warn("⚠️ godotTilt is not defined! Creating a placeholder.");
-    window.godotTilt = function (x, y) {
-        console.warn("⚠️ godotTilt was called but is not connected to Godot yet.");
-    };
-}
+// ✅ Ensure `godotTilt` is globally available before sending data
+window.godotTilt = function (x, y) {
+    console.log("📡 JavaScript -> Godot: Tilt X:", x, "Y:", y);
+    if (typeof GodotRuntime !== "undefined" && GodotRuntime.call) {
+        GodotRuntime.call("godotTilt", x, y);
+    } else {
+        console.warn("⚠️ GodotRuntime is not available yet. Retrying...");
+        setTimeout(() => { window.godotTilt(x, y); }, 1000);
+    }
+};
 
 // ✅ Function to start listening for tilt events
 function startTiltTracking() {
     console.log("🔄 Starting tilt tracking...");
-
-    if (!window.setGodotTilt) {
-        console.error("❌ setGodotTilt is undefined! Attempting to redefine...");
-        window.setGodotTilt = function(x, y) {
-            console.log("✅ Received tilt:", x, y);
-            if (typeof godotTilt === "function") {
-                godotTilt(x, y);
-            } else {
-                console.error("❌ godotTilt function is missing in Godot!");
-            }
-        };
-    }
 
     window.addEventListener("deviceorientation", (event) => {
         let tiltX = event.beta; // Front-to-back tilt (-90 to 90 degrees)
@@ -93,14 +85,6 @@ window.requestMotionPermission = function() {
     }
 };
 
-// ✅ Ensure JavaScript function is available in Godot
-if (typeof GodotRuntime !== "undefined") {
-    console.log("✅ GodotRuntime detected, exposing `godotTilt`.");
-    GodotRuntime.expose("godotTilt", function (x, y) {
-        console.log("📡 Godot -> JavaScript: Tilt X:", x, "Y:", y);
-    });
-}
-
 // ✅ Automatically request motion permission on page load
 window.requestMotionPermission();
 
@@ -119,14 +103,4 @@ window.requestMotionPermission();
     }
 
     waitForGodot();
-
-    window.setGodotTilt = function (x, y) {
-        console.log("✅ Received tilt:", x, y);
-        if (typeof godotTilt === "function") {
-            godotTilt(x, y);
-        } else {
-            console.warn("⚠️ godotTilt is not defined yet! Retrying in 1 second...");
-            setTimeout(() => { window.setGodotTilt(x, y); }, 1000);
-        }
-    };
 })();
