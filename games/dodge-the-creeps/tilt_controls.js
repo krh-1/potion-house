@@ -48,12 +48,13 @@ function startTiltTracking() {
     console.log("✅ Tilt tracking enabled!");
 }
 
-// ✅ Function to request motion permission
-function requestMotionPermission() {
-    if (typeof DeviceMotionEvent.requestPermission === "function") {
-        console.log("🔍 iOS detected: Requesting motion access...");
+// ✅ Ensure `requestMotionPermission` is globally accessible
+window.requestMotionPermission = function() {
+    console.log("🔍 Checking for motion permissions...");
 
-        // ✅ Create a user-triggered button
+    if (typeof DeviceMotionEvent.requestPermission === "function") {
+        console.log("🔍 iOS detected: Creating user-triggered button...");
+
         var button = document.createElement("button");
         button.innerText = "Enable Tilt Controls";
         button.style.position = "absolute";
@@ -68,12 +69,13 @@ function requestMotionPermission() {
         button.style.cursor = "pointer";
 
         button.onclick = function () {
+            console.log("🟢 Button clicked: Requesting motion access...");
             DeviceMotionEvent.requestPermission()
                 .then((permissionState) => {
                     if (permissionState === "granted") {
                         console.log("✅ Motion sensors enabled!");
-                        startTiltTracking();
                         button.remove(); // Remove button after permission is granted
+                        startTiltTracking();
                     } else {
                         console.error("❌ Motion permission denied! Tilt controls will not work.");
                     }
@@ -84,11 +86,12 @@ function requestMotionPermission() {
         };
 
         document.body.appendChild(button);
+        console.log("✅ Button added to page.");
     } else {
         console.log("⚠️ Motion permission request not needed.");
         startTiltTracking();
     }
-}
+};
 
 // ✅ Ensure JavaScript function is available in Godot
 if (typeof GodotRuntime !== "undefined") {
@@ -98,5 +101,5 @@ if (typeof GodotRuntime !== "undefined") {
     });
 }
 
-// ✅ Request motion permission on iOS
-requestMotionPermission();
+// ✅ Automatically request motion permission on page load
+window.requestMotionPermission();
