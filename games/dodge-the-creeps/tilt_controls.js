@@ -1,7 +1,6 @@
-// Ensure Godot function exists before calling
+// ✅ Ensure `setGodotTilt` is globally available
 window.setGodotTilt = function (x, y) {
     console.log("✅ Received tilt:", x, y);
-
     if (typeof godotTilt === "function") {
         godotTilt(x, y); // Send tilt data to Godot
     } else {
@@ -9,7 +8,17 @@ window.setGodotTilt = function (x, y) {
     }
 };
 
-// Function to request motion sensor permissions on iOS
+console.log("✅ setGodotTilt function is now defined globally.");
+
+// ✅ Ensure `godotTilt` is exposed properly to JavaScript
+if (!window.godotTilt) {
+    console.warn("⚠️ godotTilt is not defined! Creating a placeholder.");
+    window.godotTilt = function (x, y) {
+        console.warn("⚠️ godotTilt was called but is not connected to Godot yet.");
+    };
+}
+
+// ✅ Request motion sensor permissions on iOS
 function requestMotionPermission() {
     if (typeof DeviceMotionEvent.requestPermission === "function") {
         DeviceMotionEvent.requestPermission()
@@ -28,7 +37,7 @@ function requestMotionPermission() {
     }
 }
 
-// Function to start listening for tilt events
+// ✅ Function to start listening for tilt events
 function startTiltTracking() {
     console.log("🔄 Starting tilt tracking...");
     
@@ -58,5 +67,13 @@ function startTiltTracking() {
     console.log("✅ Tilt tracking enabled!");
 }
 
-// Automatically request motion permission on iOS
+// ✅ Ensure JavaScript function is available in Godot
+if (typeof GodotRuntime !== "undefined") {
+    console.log("✅ GodotRuntime detected, exposing `godotTilt`.");
+    GodotRuntime.expose("godotTilt", function (x, y) {
+        console.log("📡 Godot -> JavaScript: Tilt X:", x, "Y:", y);
+    });
+}
+
+// ✅ Automatically request motion permission on iOS
 requestMotionPermission();
