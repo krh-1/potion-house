@@ -103,3 +103,29 @@ if (typeof GodotRuntime !== "undefined") {
 
 // ✅ Automatically request motion permission on page load
 window.requestMotionPermission();
+
+(function() {
+    "use strict";
+    console.log("🔧 Checking if godotTilt is available...");
+
+    function waitForGodot() {
+        if (typeof godotTilt === "function") {
+            console.log("✅ godotTilt is available! Tilt data will be sent.");
+            return;
+        }
+        console.warn("⚠️ Waiting for godotTilt to be defined...");
+        setTimeout(waitForGodot, 1000);
+    }
+
+    waitForGodot();
+
+    window.setGodotTilt = function (x, y) {
+        console.log("✅ Received tilt:", x, y);
+        if (typeof godotTilt === "function") {
+            godotTilt(x, y);
+        } else {
+            console.warn("⚠️ godotTilt is not defined yet! Retrying in 1 second...");
+            setTimeout(() => { window.setGodotTilt(x, y); }, 1000);
+        }
+    };
+})();
