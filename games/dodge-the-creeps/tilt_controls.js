@@ -104,6 +104,7 @@ if (typeof GodotRuntime !== "undefined") {
 // ✅ Automatically request motion permission on page load
 window.requestMotionPermission();
 
+// ✅ Ensure `godotTilt` is available before sending tilt data
 (function() {
     "use strict";
     console.log("🔧 Checking if godotTilt is available...");
