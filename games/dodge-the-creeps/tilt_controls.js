@@ -18,29 +18,10 @@ if (!window.godotTilt) {
     };
 }
 
-// ✅ Request motion sensor permissions on iOS
-function requestMotionPermission() {
-    if (typeof DeviceMotionEvent.requestPermission === "function") {
-        DeviceMotionEvent.requestPermission()
-            .then((permissionState) => {
-                if (permissionState === "granted") {
-                    console.log("✅ Motion sensors enabled!");
-                    startTiltTracking(); // Start tracking tilt data
-                } else {
-                    console.error("❌ Motion permission denied! Tilt controls will not work.");
-                }
-            })
-            .catch((error) => console.error("❌ Error requesting motion permission:", error));
-    } else {
-        console.log("⚠️ Motion permission request not needed on this device.");
-        startTiltTracking(); // Start tracking immediately on non-iOS devices
-    }
-}
-
 // ✅ Function to start listening for tilt events
 function startTiltTracking() {
     console.log("🔄 Starting tilt tracking...");
-    
+
     if (!window.setGodotTilt) {
         console.error("❌ setGodotTilt is undefined! Attempting to redefine...");
         window.setGodotTilt = function(x, y) {
@@ -67,6 +48,48 @@ function startTiltTracking() {
     console.log("✅ Tilt tracking enabled!");
 }
 
+// ✅ Function to request motion permission
+function requestMotionPermission() {
+    if (typeof DeviceMotionEvent.requestPermission === "function") {
+        console.log("🔍 iOS detected: Requesting motion access...");
+
+        // ✅ Create a user-triggered button
+        var button = document.createElement("button");
+        button.innerText = "Enable Tilt Controls";
+        button.style.position = "absolute";
+        button.style.top = "10px";
+        button.style.left = "10px";
+        button.style.zIndex = "1000";
+        button.style.padding = "10px";
+        button.style.background = "#28a745";
+        button.style.color = "white";
+        button.style.border = "none";
+        button.style.borderRadius = "5px";
+        button.style.cursor = "pointer";
+
+        button.onclick = function () {
+            DeviceMotionEvent.requestPermission()
+                .then((permissionState) => {
+                    if (permissionState === "granted") {
+                        console.log("✅ Motion sensors enabled!");
+                        startTiltTracking();
+                        button.remove(); // Remove button after permission is granted
+                    } else {
+                        console.error("❌ Motion permission denied! Tilt controls will not work.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("❌ Error requesting motion permission:", error);
+                });
+        };
+
+        document.body.appendChild(button);
+    } else {
+        console.log("⚠️ Motion permission request not needed.");
+        startTiltTracking();
+    }
+}
+
 // ✅ Ensure JavaScript function is available in Godot
 if (typeof GodotRuntime !== "undefined") {
     console.log("✅ GodotRuntime detected, exposing `godotTilt`.");
@@ -75,5 +98,5 @@ if (typeof GodotRuntime !== "undefined") {
     });
 }
 
-// ✅ Automatically request motion permission on iOS
+// ✅ Request motion permission on iOS
 requestMotionPermission();
