@@ -1,0 +1,7 @@
+[gd_resource type="Shortcut" load_steps=2 format=3 uid="uid://btk75k6l4234g"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_j57o7"]
+action = &"start_game"
+
+[resource]
+events = [SubResource("InputEventAction_j57o7")]

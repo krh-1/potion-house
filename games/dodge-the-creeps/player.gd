@@ -19,28 +19,65 @@ func _ready() -> void:
 	if OS.has_feature("JavaScript"):
 		print("✅ Running in Web Browser - Enabling Tilt Controls")
 
-		# Load tilt_controls.js dynamically using the full URL
+		# Inject JavaScript for requesting motion permission
 		var js_code = """
-		var script = document.createElement('script');
-		script.src = 'https://www.potionho.us/games/dodge-the-creeps/tilt_controls.js';
-		script.onload = function() {
-			console.log('✅ tilt_controls.js loaded successfully!');
-			
-			// Wait 1 second before checking if setGodotTilt is defined
-			setTimeout(function() {
-				if (typeof window.setGodotTilt !== 'function') {
-					console.error('❌ setGodotTilt is still undefined after script load!');
-				} else {
-					console.log('✅ setGodotTilt is now available.');
-				}
-			}, 1000);
-		};
-		script.onerror = function() {
-			console.error('❌ Failed to load tilt_controls.js! Check the URL or server settings.');
-		};
-		document.head.appendChild(script);
+		function requestMotionAccess() {
+			if (typeof DeviceMotionEvent.requestPermission === 'function') {
+				DeviceMotionEvent.requestPermission()
+					.then(permissionState => {
+						if (permissionState === 'granted') {
+							console.log('✅ Motion permission granted!');
+							loadTiltControls();
+						} else {
+							console.log('❌ Motion permission denied by user.');
+						}
+					})
+					.catch(error => console.error('❌ Error requesting motion permission:', error));
+			} else {
+				console.log('⚠️ Motion permission request not needed on this device.');
+				loadTiltControls();
+			}
+		}
+
+		function loadTiltControls() {
+			var script = document.createElement('script');
+			script.src = 'https://www.potionho.us/games/dodge-the-creeps/tilt_controls.js';
+			script.onload = function() {
+				console.log('✅ tilt_controls.js loaded successfully!');
+				
+				setTimeout(function() {
+					if (typeof window.setGodotTilt !== 'function') {
+						console.error('❌ setGodotTilt is still undefined after script load!');
+					} else {
+						console.log('✅ setGodotTilt is now available.');
+					}
+				}, 1000);
+			};
+			script.onerror = function() {
+				console.error('❌ Failed to load tilt_controls.js! Check the URL or server settings.');
+			};
+			document.head.appendChild(script);
+		}
+
+		// Add a button to request motion permission (must be user-triggered)
+		if (typeof DeviceMotionEvent.requestPermission === 'function') {
+			var button = document.createElement('button');
+			button.innerText = 'Enable Tilt Controls';
+			button.style.position = 'absolute';
+			button.style.top = '10px';
+			button.style.left = '10px';
+			button.style.zIndex = '1000';
+			button.onclick = function() {
+				requestMotionAccess();
+				button.remove(); // Remove button after granting permission
+			};
+			document.body.appendChild(button);
+		} else {
+			// If no permission request is needed, load the tilt controls immediately
+			loadTiltControls();
+		}
 		"""
-		
+
 		# ✅ FIX: Use JavaScriptBridge instead of JavaScript
 		JavaScriptBridge.eval(js_code, true)
 
